@@ -20,6 +20,15 @@ using namespace std;
 ofstream out_Pars;
 ofstream out_Data;
 //Classes
+class parsSet
+{
+public:
+	int numPop,K,numOther,numHybrid;
+	double*ES;
+	parsSet();
+	~parsSet();
+private:
+};
 class ind
 {
 public:
@@ -29,15 +38,6 @@ public:
 	ind();
 	~ind();
 	void ind::calcW(parsSet pars);
-private:
-};
-class parsSet
-{
-public:
-	int numPop,K,numOther,numHybrid;
-	double*ES;
-	parsSet();
-	~parsSet();
 private:
 };
 class pop
@@ -59,6 +59,7 @@ void input(parsSet*parsPtr);
 void initalizeScinerio(parsSet*parsPtr);
 void initalizePops(parsSet,pop**popVec1Ptr,pop**popVec2Ptr);
 void initalizeAF(pop* popVec1,parsSet pars);
+void selection1(parsSet pars,pop*popVecIn,pop*popVecOut);
 int _tmain(int argc, _TCHAR* argv[])
 {
 	//Variables
@@ -66,7 +67,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	parsSet pars;
 	input(&pars);
 	initalizePops(pars,&popVec1,&popVec2);
-
+	selection1(pars,popVec1,popVec2);
 	getchar();
 	return 0;
 }
@@ -205,13 +206,13 @@ void initalizeScinerio(parsSet*parsPtr)
 //Set fitness effects:
 	(*parsPtr).ES=new double[(*parsPtr).numOther];
 	/*Scenerio 1.1*/
-	for(int l=0;l<(*parsPtr).numOther;l=0)
+	for(int l=0;l<(*parsPtr).numOther;l++)
 	{
 		(*parsPtr).ES[l]=0.0;
 	}
 
 	out_Pars<<"Fitness Effects: "<<endl;
-	for(int l=0;l<(*parsPtr).numOther;l=0)
+	for(int l=0;l<(*parsPtr).numOther;l++)
 	{
 		out_Pars<<(*parsPtr).ES[l]<<",";
 	}
@@ -257,7 +258,7 @@ void initalizePops(parsSet pars,pop**popVec1Ptr,pop**popVec2Ptr)
 		cout<<(*popVec1Ptr)[p].numInd<<",";
 	}
 	cout<<endl;
-	cout<<"Inital allele Frequecies:"<<endl;
+	//cout<<"Inital allele Frequecies:"<<endl;
 	for(int p=0;p<pars.numPop;p++)
 	{
 		for(int i=0;i<(*popVec1Ptr)[p].numInd;i++)
@@ -300,7 +301,7 @@ void initalizeAF(pop* popVec1,parsSet pars)
 			}
 		}
 		popVec1[p].calcAF(pars);
-		cout<<"\n Population "<<p<<endl;
+		//cout<<"\n Population "<<p<<endl;
 		//popVec1[p].printAF(pars);
 	}
 }
@@ -312,8 +313,10 @@ void selection1(parsSet pars,pop*popVecIn,pop*popVecOut)
 		cnt=0;
 		for(int i=0;i<popVecIn[p].numInd;i++)
 		{
+			popVecIn[p].indVec[i].calcW(pars);
 			if(rand()/(double)RAND_MAX<popVecIn[p].indVec[i].W)//Survives
 			{
+				//cout<<"Individual Survives: W="<<popVecIn[p].indVec[i].W<<endl; getchar();
 				for(int c=0;c<2;c++)
 				{
 					for(int l=0;l<pars.numHybrid;l++)
@@ -327,11 +330,13 @@ void selection1(parsSet pars,pop*popVecIn,pop*popVecOut)
 				}
 				cnt++;
 			}
+			//else {cout<<"Individual Dies: W="<<popVecIn[p].indVec[i].W<<endl;}
 		}
 	}
 }
-
-
-//Add selection
-//Add migration
+void mating(parsSet pars,pop*popVecIn,pop*popVecOut)
+{
+	
+}
 //Add mating
+//Add migration
