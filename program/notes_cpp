@@ -1,6 +1,9 @@
+
 #selection
 structure: 3 classes
 1, class ind
+  -vector1: loci: hybird loci and other loci  --> each locus is two dimensional (D1: chrom; D2:locus postion)
+  -vector2: metrics (fitness, etc.) 
 2, class parsSet
   -cluster parameter
   -ES =0 if the locus is wildtype, new mutations will have fitness consequenc
@@ -15,3 +18,4 @@ structure: 3 classes
 void selection1 
     calculate fitness and use the fitness
     
+#
