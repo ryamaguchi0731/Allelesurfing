@@ -1,0 +1,17 @@
+#selection
+structure: 3 classes
+1, class ind
+2, class parsSet
+  -cluster parameter
+  -ES =0 if the locus is wildtype, new mutations will have fitness consequenc
+  -there is fitness cost
+  
+3, class pop 
+  -number of individuals 
+  -double (containing stats such as allele frequency etc.) 
+  -calculations
+
+
+void selection1 
+    calculate fitness and use the fitness
+    
