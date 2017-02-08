@@ -1,6 +1,15 @@
 
+peishcl 2013
+when will load be large
+Migration rate: small (expansion dominant)
+selection: intermediate (too small, not enough load; too big, mask drift effect)
+
+
+1D or 2D doesnt matter
+
+Questions
 1> why multiplicative
 2> reproduction question: whether it will matter when to do selection
-3> burnin 1000, mutation load equilibrium
+3> burnin 1000, mutation load equilibrium, if not at equil will change the dynamics?
 
 
