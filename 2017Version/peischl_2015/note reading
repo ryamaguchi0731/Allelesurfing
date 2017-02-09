@@ -21,3 +21,23 @@ why use fitness-dependent growth rate
 "First, there should be an absolute limit on the mutation load: individuals with too many del- eterious mutations will not be able to survive or repro- duce, independently of the fitness of conspecifics."
 "Second, because the efficiency of selection on the wave front increases with decreasing growth rate (Hallatschek and Nel- son 2010; Peischl et al. 2013), 
 there should be a negative feedback between the dynamics of expansion load and the expansion process itself."
+
+whether we should do the following alternatives: 
+1) selection on parents relative fitness
+2) selection on offspring fitness
+might change recombination rate
+
+
+About hard selection: 
+1) why geometric growth
+2) explaination of the equation
+3) why K or r or both depend of fitness --> eoclogical implication; does that change the fitness "meaning" 
+
+
+recombining population
+1, expand faster average expansion rate 
+2, more continuous expansion
+3, higher fitness on the inside and lower at the edge
+
+
+
