@@ -13,3 +13,11 @@ Questions
 3> burnin 1000, mutation load equilibrium, if not at equil will change the dynamics?
 
 
+Peischl 2015
+Importance of studying allele surfing
+"These findings may help explain many inter- esting phenomena, such as a reduced potential to adapt to novel environments (Pujol and Pannell 2008) and patterns of intraspecific variation in inbreeding depression (Pujol et al. 2009) and mutation load (Peischl et al. 2013)."
+
+why use fitness-dependent growth rate
+"First, there should be an absolute limit on the mutation load: individuals with too many del- eterious mutations will not be able to survive or repro- duce, independently of the fitness of conspecifics."
+"Second, because the efficiency of selection on the wave front increases with decreasing growth rate (Hallatschek and Nel- son 2010; Peischl et al. 2013), 
+there should be a negative feedback between the dynamics of expansion load and the expansion process itself."
