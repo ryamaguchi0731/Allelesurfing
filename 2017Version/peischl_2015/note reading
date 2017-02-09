@@ -39,5 +39,5 @@ recombining population
 2, more continuous expansion
 3, higher fitness on the inside and lower at the edge
 
-
-
+with recombination 
+Df and Db are larger: more mutation on the wavefront originated on the wavefront.
