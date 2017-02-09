@@ -1,0 +1,881 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     35357,        872]
+NotebookOptionsPosition[     32945,        790]
+NotebookOutlinePosition[     33399,        808]
+CellTagsIndexPosition[     33356,        805]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["\<\
+Starting with standard logistic (\[Theta]-logistic with \[Theta]=1)\
+\>", "Subsection",
+ CellChangeTimes->{{3.695666349920514*^9, 3.69566637573938*^9}}],
+
+Cell["\<\
+Logistic: # offspring per parent:\
+\>", "Text",
+ CellChangeTimes->{{3.6956655164644003`*^9, 3.6956655238864803`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"1", "+", 
+  RowBox[{"r", 
+   RowBox[{"(", 
+    RowBox[{"1", "-", 
+     RowBox[{"n", "/", "K"}]}], ")"}]}]}]], "Input",
+ CellChangeTimes->{{3.695665485505166*^9, 3.695665499879345*^9}}],
+
+Cell["\<\
+Logistic: # offspring per parent in terms of R (where R is the # of offspring \
+per parent when the population is low, and r is the amount by which this is \
+above one):\
+\>", "Text",
+ CellChangeTimes->{{3.6956655164644003`*^9, 3.695665595439603*^9}}],
+
+Cell[BoxData[
+ RowBox[{"1", "+", 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{"R0", "-", "1"}], ")"}], 
+   RowBox[{"(", 
+    RowBox[{"1", "-", 
+     RowBox[{"n", "/", "K"}]}], ")"}]}]}]], "Input",
+ CellChangeTimes->{{3.695665528337014*^9, 3.695665529310761*^9}, 
+   3.695665602416006*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Solve", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"1", "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"R0", "-", "1"}], ")"}], 
+      RowBox[{"(", 
+       RowBox[{"1", "-", 
+        RowBox[{"n", "/", "K"}]}], ")"}]}]}], "\[Equal]", "1"}], ",", "n"}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.695665782225773*^9, 3.695665814228438*^9}, {
+   3.695666435989105*^9, 3.695666436490609*^9}, 3.695667414971979*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{"n", "\[Rule]", "K"}], "}"}], "}"}]], "Output",
+ CellChangeTimes->{{3.695665789421646*^9, 3.695665815064588*^9}, 
+   3.695666436974189*^9, 3.695667415382452*^9}]
+}, Open  ]],
+
+Cell["\<\
+Now imagine adding genetic differences in.  w could affect r, or it could \
+affect K, or it could affect both.\
+\>", "Text",
+ CellChangeTimes->{{3.695665875466073*^9, 3.695665900584442*^9}}],
+
+Cell[BoxData[
+ RowBox[{"1", "+", 
+  RowBox[{"w", " ", "r", 
+   RowBox[{"(", 
+    RowBox[{"1", "-", 
+     RowBox[{"n", "/", "K"}]}], ")"}]}]}]], "Input",
+ CellChangeTimes->{{3.695665485505166*^9, 3.695665499879345*^9}, {
+  3.6956659064332952`*^9, 3.695665907033434*^9}}],
+
+Cell["\<\
+We don\[CloseCurlyQuote]t like this because as w declines to zero, the worst \
+that happens is the population stops growing.  (In other words, w is \
+conceptualized as the impact on the fitness of an individual, but r is the \
+growth rate...not a measure of offspring number.)
+
+Try sticking in R:\
+\>", "Text",
+ CellChangeTimes->{{3.695665959362028*^9, 3.6956660256073093`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"1", "+", 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"w", " ", "R0"}], "-", "1"}], ")"}], 
+   RowBox[{"(", 
+    RowBox[{"1", "-", 
+     RowBox[{"n", "/", "K"}]}], ")"}]}]}]], "Input",
+ CellChangeTimes->{{3.695665528337014*^9, 3.695665529310761*^9}, 
+   3.695665602416006*^9, {3.695666023577896*^9, 3.695666023720769*^9}}],
+
+Cell["\<\
+So even if R0 starts above 1, there can come a time when the genome has \
+decayed to the point where w is small enough that w R0<1 and the population \
+declines.
+
+This is problematic in that when w is so low that (w R0-1) is negative, then \
+if the population starts n>K, then it continues to grow to infinity.  Even if \
+you assumed the population were below K, it still has the artefact of having \
+more kids per parent near n~K than near n~0, which doesn\[CloseCurlyQuote]t \
+make much sense (because of the multiplication by (1-n/K)).\
+\>", "Text",
+ CellChangeTimes->{{3.695666047126247*^9, 3.6956660864720993`*^9}, {
+  3.6956662671898613`*^9, 3.695666340688241*^9}, {3.6956663828063517`*^9, 
+  3.695666383140033*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Starting with Beverton-Holt model\
+\>", "Subsection",
+ CellChangeTimes->{{3.695666349920514*^9, 3.6956663945240393`*^9}}],
+
+Cell["Model (p. 185):", "Text",
+ CellChangeTimes->{{3.695666402267783*^9, 3.695666404577965*^9}, {
+  3.695666442392568*^9, 3.6956664447682943`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox["R0", 
+   RowBox[{"1", "+", 
+    RowBox[{"\[Alpha]", " ", "n"}]}]], ";"}]], "Input",
+ CellChangeTimes->{{3.695665774608624*^9, 3.695665797965621*^9}, {
+  3.695665865045046*^9, 3.695665869443914*^9}}],
+
+Cell["\<\
+Where the equilibrium population size is:\
+\>", "Text",
+ CellChangeTimes->{{3.695666406777638*^9, 3.6956664160977697`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Solve", "[", 
+  RowBox[{
+   RowBox[{
+    FractionBox["R0", 
+     RowBox[{"1", "+", 
+      RowBox[{"\[Alpha]", " ", "n"}]}]], "\[Equal]", "1"}], ",", "n"}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.695665782225773*^9, 3.695665814228438*^9}, {
+  3.695666435989105*^9, 3.695666436490609*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{"n", "\[Rule]", 
+    FractionBox[
+     RowBox[{
+      RowBox[{"-", "1"}], "+", "R0"}], "\[Alpha]"]}], "}"}], "}"}]], "Output",\
+
+ CellChangeTimes->{{3.695665789421646*^9, 3.695665815064588*^9}, 
+   3.695666436974189*^9}]
+}, Open  ]],
+
+Cell["\<\
+What could the genes affect? Again, we might say that the genes only \
+influence the # offspring per parent when the population size is small:\
+\>", "Text",
+ CellChangeTimes->{{3.6956664231704903`*^9, 3.695666470810397*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox[
+   RowBox[{"w", " ", "R0"}], 
+   RowBox[{"1", "+", 
+    RowBox[{"\[Alpha]", " ", "n"}]}]], ";"}]], "Input",
+ CellChangeTimes->{{3.695666474011692*^9, 3.695666474211216*^9}}],
+
+Cell["\<\
+That as the population declines in fitness, the growth at small n would \
+decline (which we like), and further as the w declines then the equilibrium \
+population size declines:\
+\>", "Text",
+ CellChangeTimes->{{3.695666547018528*^9, 3.695666569921315*^9}, {
+  3.695666603504406*^9, 3.695666615695588*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Solve", "[", 
+  RowBox[{
+   RowBox[{
+    FractionBox[
+     RowBox[{"w", " ", "R0"}], 
+     RowBox[{"1", "+", 
+      RowBox[{"\[Alpha]", " ", "n"}]}]], "\[Equal]", "1"}], ",", "n"}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.695666596651133*^9, 3.695666596817964*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{"n", "\[Rule]", 
+    FractionBox[
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"R0", " ", "w"}]}], "\[Alpha]"]}], "}"}], "}"}]], "Output",
+ CellChangeTimes->{3.695666597346039*^9}]
+}, Open  ]],
+
+Cell["\<\
+Once R0 w falls below 1, there is then no positive equilibrium.  The question \
+here though is whether or not you want the equilibrium population size to \
+automically decline with w (not just the growth when rare).  This is a \
+question about the nature of pleiotropy in the model...what can the genes \
+affect.  Here it is both growth when rare (n~0) and steady state.
+
+Alternatively:\
+\>", "Text",
+ CellChangeTimes->{{3.695666625262706*^9, 3.695666646254199*^9}, {
+  3.695666705402367*^9, 3.695666784480798*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ FractionBox["R0", 
+  RowBox[{"1", "+", 
+   RowBox[{"w", " ", "\[Alpha]", " ", "n"}]}]]], "Input",
+ CellChangeTimes->{{3.695666780058632*^9, 3.6956667813311863`*^9}, {
+  3.695666908275669*^9, 3.6956669122024612`*^9}, {3.695667044007594*^9, 
+  3.695667049350134*^9}}],
+
+Cell[BoxData[
+ FractionBox["R0", 
+  RowBox[{"1", "+", 
+   RowBox[{"n", " ", "w", " ", "\[Alpha]"}]}]]], "Output",
+ CellChangeTimes->{3.695666914358636*^9, 3.695667050179757*^9}]
+}, Open  ]],
+
+Cell["\<\
+When n is small, w has no effect.  So the genes are not influencing ability \
+of the organism to gather resources when the resources are abundant (they\
+\[CloseCurlyQuote]re just worse when there is competition)\
+\>", "Text",
+ CellChangeTimes->{{3.695666805372942*^9, 3.695666842155714*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Solve", "[", 
+  RowBox[{
+   RowBox[{
+    FractionBox["R0", 
+     RowBox[{"1", "+", 
+      RowBox[{"n", " ", "w", " ", "\[Alpha]"}]}]], "\[Equal]", "1"}], ",", 
+   "n"}], "]"}]], "Input",
+ CellChangeTimes->{3.695666861158708*^9, 3.695667053998806*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{"n", "\[Rule]", 
+    FractionBox[
+     RowBox[{
+      RowBox[{"-", "1"}], "+", "R0"}], 
+     RowBox[{"w", " ", "\[Alpha]"}]]}], "}"}], "}"}]], "Output",
+ CellChangeTimes->{3.695666861852796*^9, 3.695667054496285*^9}]
+}, Open  ]],
+
+Cell["\<\
+So the equilibrium will behave oddly, with a larger population size when w is \
+smaller. Although we could use instead something like:\
+\>", "Text",
+ CellChangeTimes->{{3.695666865243939*^9, 3.695666869200376*^9}, {
+  3.695666973567724*^9, 3.695666995837228*^9}, {3.695667061373941*^9, 
+  3.695667072379054*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Solve", "[", 
+  RowBox[{
+   RowBox[{
+    FractionBox["R0", 
+     RowBox[{"1", "+", 
+      RowBox[{"n", " ", 
+       RowBox[{"\[Alpha]", "/", "w"}]}]}]], "\[Equal]", "1"}], ",", "n"}], 
+  "]"}]], "Input",
+ CellChangeTimes->{
+  3.695666861158708*^9, {3.695667053998806*^9, 3.6956671005013866`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{"n", "\[Rule]", 
+    FractionBox[
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", "R0"}], ")"}], " ", "w"}], "\[Alpha]"]}], 
+   "}"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.695666861852796*^9, {3.695667054496285*^9, 3.695667087701373*^9}}]
+}, Open  ]],
+
+Cell["\<\
+The Peischl model (after (1)) has w in the numerator (in 1) and in the \
+denominator:\
+\>", "Text",
+ CellChangeTimes->{{3.695666865243939*^9, 3.695666869200376*^9}, {
+  3.695666973567724*^9, 3.695666995837228*^9}, {3.6956671580966673`*^9, 
+  3.695667192160184*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Solve", "[", 
+  RowBox[{
+   RowBox[{
+    FractionBox[
+     RowBox[{"w", " ", "R0"}], 
+     RowBox[{"1", "+", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"w", " ", "R0"}], "-", "1"}], ")"}], " ", 
+       RowBox[{"n", "/", "K"}]}]}]], "\[Equal]", "1"}], ",", "n"}], 
+  "]"}]], "Input",
+ CellChangeTimes->{
+  3.695666925716445*^9, 3.695666955987652*^9, {3.6956671941066923`*^9, 
+   3.695667194274261*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{"n", "\[Rule]", "K"}], "}"}], "}"}]], "Output",
+ CellChangeTimes->{3.695666926312207*^9, 3.695666956581891*^9, 
+  3.695667001589023*^9, 3.695667197017479*^9}]
+}, Open  ]],
+
+Cell["\<\
+This has the property of w affecting growth when rare (w R0 being the number \
+of kids per parent when n~0), but not affecting the steady state.  Still this \
+model will have the artefact of growing despite w R0 being less than one if \
+we start above n~K:\
+\>", "Text",
+ CellChangeTimes->{{3.6956672046870337`*^9, 3.695667262541731*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Plot", "[", 
+  RowBox[{
+   RowBox[{
+    FractionBox["wR0", 
+     RowBox[{"1", "+", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"wR0", "-", "1"}], ")"}], " ", "noverK"}]}]], "/.", 
+    RowBox[{"wR0", "\[Rule]", "0.9"}]}], ",", 
+   RowBox[{"{", 
+    RowBox[{"noverK", ",", "0", ",", "2"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.695667268503986*^9, 3.695667298718079*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[{{}, {}, 
+   {Hue[0.67, 0.6, 0.6], LineBox[CompressedData["
+1:eJwVz3k41HkcB/ChKcqmsLSjrEeLknStklX7LgqRDh3qSVPZSIS0taqtlc10
+Y7asLlcNOuQoowMdD0Nuo9FiE8U0Rub4/TRmcs13Z//4PO/n9cfn87w/NkFR
+/sH6DAbDTzf/p0+wtPlVX/DPnLzKxvp6GZgelge7WKugjG1LWdEgw48Z11KL
+WJuRtC4xiK+zb0ProzTWXkiTepipjTIE7NU8v8w6DEmU65FwoQzv55/1SGDF
+I8b8GdOoRYZM8/VnLrCSwTJa9mHtOxniDItmnWdlYfzO4cvv+mTYtv1WAUXz
+MbDc9Er6RDmMSFyg1/cv4cBJI5xZcthtVEgrLgpQ1bba22y1HDGNrrimqsGk
+UbYwOFiOaXyTTj29Jjx5xG0QnpbjcbdHfdOyN5ikVVtPyZajPCxt+nZZC9al
+BoWOVMoxaL98Sl5EKxT7BAe+iOXQH8qdOt3uXwjnpLObJyiwhOx+vCm/A27P
+cqr49grUxzs3Vs3pQjlj6w1XTwWsuf1D9xQfYMCoW/gkVIF+TVfn2wXd2LEt
+3trpvAJZn0trjRN7YGatH577QAFjqztKsViMsz0d81qaFLi0vzgk01aCXWTT
+hl5KAfWKXHFobC8kAy+ip5krcXiRgG9RIYVFqelURxcluvIFF5ttPmN/gcfv
+BwKVGAlruelwvB+a9oMOAXFKOK400IaUyvA16USURZYSXrdt9j2cpoDBgrYK
+Vq0SMVa7Zn7U7X0siWZ/lisxV7bFqNWPgl2fRcN9QwpmUyhDwTCFir+/eTl5
+BgXmy5sFP6TS6M5cnrF+HoVw59L2ib4D4CW6LfR2p5C7JijzhXoAf2VWp5pt
+pTDYbzlVkvIFa8ylz4tDKRRv8hqXvEoF+zcxxPIkhVhvTgZfooLnA0+FP5eC
+zXufNh5nEC45VTlbeBR+colPZi1So1PkYjv7KYXA75uG9ERqXDg+uUZQp7tf
+m9B9ME6DcFthvttHCteY7MP+tl9R7Xc56uigrn9n8W19wVegVqL6YyKN8Sfj
+NrtGD8HZ4VNEhDUNxj12QbfpMGosA3nfOdM4dKMgwbR8GBsyNjg88aHx3PGc
+oUnkCCo9lX72e2iY+Bya+6fxKEj23Ujv32h0OAlFx8pGUacpZkYk0ChMh62Y
+PYai3Ici8GjsLFhiYqUdQ51QVtr+lMYpzq24jvta+M3IuMgR0siTWt00XktQ
+v6wh8q2Exrk0zu7OdQT5r08muvbS2Osvt8vfSMAISXyUpvOMsrJCvwCCQv1m
+gxApjQtJO6ouBRGUVPZI1H00QpdcpycdI4gVxcaw5DRmxn/rbZBDwA5NEe/5
+QkO79MTk1rsEE2zauFU6t8t73uTkErjMOr3SUUWDG1C00/MhgdNqi0KVzmSO
+/6+cMoL43qXlZ9W6f5uT0seJCHw7Ckvyh2g8PaP5RfSWoNrrfp7ZMI1kt10O
+vDaC63dMso/q7Js9j+/eSfA60vGW+wiNkqMNNXF9BLTnlcZ/RmmkOC1O2igj
+CDnF/OQ2RiO6O3WzjZJgPFNCMnWevfZA1ysVwVzzEfdwLQ2mXksWV0NwfOn8
+cKHOH4rdwnYPE5xobrm6mNAoC+PNXzBGYO8oq76h81Vro0FCCA5xj2iJzv8B
+sUmUoQ==
+     "]]}},
+  AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
+  Axes->True,
+  AxesOrigin->{0, 0.9},
+  PlotRange->{{0, 2}, {0.9000000036734696, 1.1249999942602043`}},
+  PlotRangeClipping->True,
+  PlotRangePadding->{
+    Scaled[0.02], 
+    Scaled[0.02]}]], "Output",
+ CellChangeTimes->{{3.695667274529484*^9, 3.695667299197838*^9}}]
+}, Open  ]],
+
+Cell["\<\
+So why work with Beverton-Holt in the first place??  Comparing the logistic \
+and B-H logistic, where both are parameterized such that R0 is growth when \
+rare and K is the steady state:\
+\>", "Text",
+ CellChangeTimes->{{3.695667391881124*^9, 3.69566740029613*^9}, {
+  3.6956674360303698`*^9, 3.695667466957309*^9}}],
+
+Cell[BoxData[
+ RowBox[{"1", "+", 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{"R0", "-", "1"}], ")"}], 
+   RowBox[{"(", 
+    RowBox[{"1", "-", 
+     RowBox[{"n", "/", "K"}]}], ")"}]}]}]], "Input"],
+
+Cell[BoxData[
+ FractionBox["R0", 
+  RowBox[{"1", "+", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"R0", "-", "1"}], ")"}], " ", 
+    RowBox[{"n", "/", "K"}]}]}]]], "Input",
+ CellChangeTimes->{{3.69566742903367*^9, 3.6956674309362803`*^9}}],
+
+Cell["\<\
+What happens to the number of offspring per parent when n is very very very \
+large?\
+\>", "Text",
+ CellChangeTimes->{{3.6956674751798143`*^9, 3.695667516655817*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Show", "[", 
+  RowBox[{
+   RowBox[{"Plot", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"1", "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"R0", "-", "1"}], ")"}], 
+         RowBox[{"(", 
+          RowBox[{"1", "-", 
+           RowBox[{"n", "/", "K"}]}], ")"}]}]}], "/.", 
+       RowBox[{"R0", "\[Rule]", "1.1"}]}], "/.", 
+      RowBox[{"K", "\[Rule]", "100"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"n", ",", "0", ",", "2000"}], "}"}], ",", 
+     RowBox[{"PlotStyle", "\[Rule]", "Red"}]}], "]"}], ",", 
+   "\[IndentingNewLine]", 
+   RowBox[{"Plot", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       FractionBox["R0", 
+        RowBox[{"1", "+", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"R0", "-", "1"}], ")"}], " ", 
+          RowBox[{"n", "/", "K"}]}]}]], "/.", 
+       RowBox[{"R0", "\[Rule]", "1.1"}]}], "/.", 
+      RowBox[{"K", "\[Rule]", "100"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"n", ",", "0", ",", "2000"}], "}"}], ",", 
+     RowBox[{"PlotStyle", "\[Rule]", "Blue"}]}], "]"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.6956675040440903`*^9, 3.695667571842902*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[{{{}, {}, 
+    {RGBColor[1, 0, 0], LineBox[CompressedData["
+1:eJwB4QQe+yFib1JlAgAAAE0AAAACAAAA6/L8TEZmBT8xuaSOmZnxP3KleTNE
+oeM/UparXRaX8T94C+1mGaHzP3JzsiyTlPE/e76mAAShA0CzLcDKjI/xP/2X
+g035oBNANqLbBoCF8T++BPLz86AjQDqLEn9mcfE/HjspR/GgM0BDXYBvM0nx
+P07WxPDvoENAVgFcUM348D9AkYMLRXRUQASEn456SvA/EfNWsJFjXkBS86JH
+ak/vPz67eFF9EGRA6p73OEIQ7j+gc76t3FhpQJW/ZCMNtuw/3knd0vtGbkAs
+xq678nLrP2VLeu1iz3FA10ERTcsU6j9BuvcEz250QNB9ZKUGveg/C7jhABvh
+dkC2n5SrXHznPyvxR248iHlAsDbdqqUg5j86uRrAPQJ8QJazAlgJ3OQ/r0lf
+JcZvfkDK8BjMz53jP70KEP4RiYBAEqNHOYlE4j8auKbbsMOBQEY7U1RdAuE/
+IoP7cboYg0Acke7QSErfP14yCZKHZ4RARCwYh5yc3D8RKU2kxJ+FQEiT+5gl
+Hdo/bz1Pb2zyhkBy5A+dlGfXP0SZhyyELohAdgHe/Djg1D/EEn6iBoWJQKII
+3U7DItI/d3AtokzVikDQIHtdJuTOP6EVE5QCD4xAFMiv1DDfyT932LY+I2ON
+QKBDRjAHbsQ/xOKQ27OgjkC4raCGkLK+P0TRIwII2I9AqNY65Ci8tD+4brpw
+45SQQHBQMRWy2qM/iRh+2XoykUAAcCsRsFBEvzDRoJ5H3ZFAoFozBAgupr/w
++58o9oSSQFABi2xQ0rW/bEq6q1whk0DwJRVox9S/v72nM4v4ypNA8NBtTdNX
+xb/KKMhjTGmUQEB3XS/YaMq/8Rs5AYIElUBYHIr1UWDPv+0dCfvsrJVAkHaq
+6/9h0r+lQ/TtD0qWQBwT1oCh5dS/Mng+PWj0lkCAxdAjXZ/Xv3vQo4V4k5dA
+CKwRa+Mq2r/dmuWSai+YQPgRcSSkqdy/FXSG/JHYmEDAjZ/rfl7fvwlxQl9x
+dplA1h6KK5Ly4L/SfF0ehiGaQLoBLOjxUOK/tfpUonzJmkBQJN3d7qjjv1Oc
+Zx8rZptA+mCxJdHp5L/HTNn4DhCcQI4obXTARea/9iBmy6qunEA4CkwVlYrn
+vz9nz2IoSp1Akis67wbJ6L9evJdW2/KdQNjXD9CFIuq/ODV7Q0aQnkA2nggD
+6mTrv9Z7QioFk55A7AfYjYlq6791wgkRxJWeQKJxpxgpcOu/sk+Y3kGbnkAS
+RUYuaHvrvyxqtXk9pp5A7uuDWeaR678gn++vNLyeQKg5/6/ivuu/CQlkHCPo
+nkAg1fVc2xjsv6hPKwPi6p5A2D7F53oe7L9GlvLpoO2eQJColHIaJOy/hCOB
+tx7znkAAfDOIWS/sv/49nlIa/p5A3CJxs9dF7L/yctiIERSfQJZw7AnUcuy/
+kLmfb9AWn0BM2ruUc3jsvy8AZ1aPGZ9ABkSLHxN+7L9sjfUjDR+fQHIXKjVS
+iey/5qcSvwgqn0BSvmdg0J/sv4Tu2aXHLJ9ACCg362+l7L8jNaGMhi+fQMCR
+BnYPq+y/YMIvWgQ1n0AwZaWLTrbsv/4I90DDN59A5s50Fu677L+dT74ngjqf
+QJw4RKGNwey/PJaFDkE9n0BWohMsLcfsv9rcTPX/P59ADAzjtszM7L9oIWc9
+
+      "]]}}, {{}, {}, 
+    {RGBColor[0, 0, 1], LineBox[CompressedData["
+1:eJwVjnk4lAkcgBlDyeaasqJEs9thiGVtG6bfT0SuPFk72+6WahTVY42JzbjT
+IGkmx7jG8X2DYmsr7VFho5Rjy9Oinnwz44jRISVmlIjstn+8z/vn+9pwecEH
+aVpaWoEf+d8vNfMB3uG6wHUXiaVSNRw9F+/sVTkCJXGv4nuL1CAwGA9fUTkF
+Tu6fei0rUENic40WvVIHhwWs6PwzavhQLAyclTHQsXraUipUQzNdMzUlY6Jx
+uu2hrp/UYOW2wUctc8Y14lLjga1q2NHbOjkh88RP4oM4EROTgHlCg22xIeio
+m5sv95oEkynOlbywUJwt1GsScydgy1+CncnGB/DRHob0YchrkMU0X+rfdRiV
+pttmFzzHYdB34MGcdxSGWnVetuK8goP+CePcLj4yTuvNdB94CR6N7+hdUbHo
+WZ7D1T85Bgb1w1qWw8ew1mFhnt/6Alhqnyj3rHhkHCHczn8YBdcGi1tsWhJ+
+9c+oa+mOUajz3ft5Oy8FUzun/AwuPoemJcYLJqeOY9tSJZ+m+xws6mv6rtxJ
+wy/KdSXAfwZrhHP8RnMhuit4R10VTyHUST//ZEQ6FibEFlf4PwWTDYFnW8kM
+XP5WatB//wnw2EG8SE0mZrewlf3+T8BLetIufWMWlmkLjazlI9BqmlKll3EK
+lWbb6eH7RiAu2r4q4FE21nY8adg0qYLK5YwCmpEIVzZaexmIVBAnv7aFGSZG
+PVVaDO0zFbSqcvv+kJ3BPSXubaPtw+DVw6QtluegSNSocuQNQ31UY/RIQS7e
+WEVPbmcMwynzFEWCUx4ySM37jpYhcOyRET4DeWjooyPZGTkEk3Pk+un0fBxb
+ZhN8wXIIIv0af91tI8EwdUzAjzWPoanW+fTMPQke4zm33jN8DPfW/x0WcLgA
+fQ/vz+JkDoLacrP2CXohGj7voZboDsL4Kv25VxcL8fiGP8tSkwfgnOebcSO/
+IvRnSCTeOgPgJNjCPvSmCPn8Hls7YT8kdldnCCTFSG02u5tg1A8DpU/zjziU
+4F0pKyWnsg+Wx2bO58lLcGPS2ULTjX2gz9+6l39MikN1r7+tblPCg6Q9Vpk2
+pUhzoSk03ynh6vuQqqS7pdjCuryInFDAN+URq1nhZVi9djqClaeAjgDFjKFx
+Oe5O5s802ytg2jq888LlcjTf1dtf/lAOENHFXe9XgQnRJoEXkuUQeqOY06ep
+QLe1TnQaUw5fuyR6eucSGNNWSr/ZTUFv4lZbXQmB6/i7L4V0UfDzbX2T1kIC
++zzs08buU/B7UMmgRxmBjlUD5806KbA7cjWeXUNg8Juqheg2CqzJibovbxA4
+m2paZ99Igb7+gZXMUQI13YLp9moKfgli6ajGCNwxH6bZX0WBd5HmhWycwDK3
+SPMPMgrSmWnXraYINGVdUzkTFCywiWCLBQLF1Xt51SUUaI7Ks0yWkbgoQszN
+FlOQ20Dyus1IvH6+a36diAIHrQhOzgoSw8n6W23ZFESK3zKXribRd/v+Nu0s
+Cp7Vmt5cbEsiJxpbEk987L1WnOuwI9Fy9ctaizQKmC6VokwHEi9Oa9c3pFKw
+77bDD3QXEn+b44TMJH38WfwO72wi0bYsc6g4kYKKoOZ1J1xJFPjoFm1KoMC9
+KMPQg03iUFNnLCWgQNkf8PZfIPH7pgdJcXEU/Ae7L1ZS
+      "]]}}},
+  AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
+  Axes->True,
+  AxesOrigin->{0, 0},
+  PlotRange->{{0, 2000}, {-0.8999999591836754, 1.0999999591836735`}},
+  PlotRangeClipping->True,
+  PlotRangePadding->{
+    Scaled[0.02], 
+    Scaled[0.02]}]], "Output",
+ CellChangeTimes->{{3.695667560105187*^9, 3.695667572273457*^9}},
+ ImageCache->GraphicsData["CompressedBitmap", "\<\
+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
+3xl/O+N0TUVDu+VxZNagV9NmF119cy5od14nbKxzUgdLhsx4W4vUVZeHFx+l
+NS3S2ajT5NmKL7nLPabOHuTCsXcm3hs9W58L232bR+o2t7W5/AJLpjDh+ed9
+tUz3bXZzDJGEO6ieSx2aXershtRrrtM999rryuyUDR15phze6ym/xJ5rcBFe
+iIU3Lv2ltKrB2fX2Omv1uAjM7nuTlHgF3lRZ0mPfG3unwHtOPTwy9czkO7oe
+sAVRsoxf5UkluCUlRQ0LKSpSVV988cOkrc9/5efPZkmPrQ9XuzT1VrHEo8iY
+iCgMOvjxrkW5UQE9UAzvNYoXsqBBvs1IPf79vBkoltqmVjEhWy5rC8vqQino
+ap2iQhZiMf/OGqgi9WO7SUFFYY4U9Jh6eGTq9qT70TywBVGyfIF2fxKaPaq3
+DvXjm6uKc0Sgx4Wr3jhGVhlKS3aZiVe5p/jhDeOKpbwxco6bnSNSUtXck4nD
+ezt7Hsq6b0DqzsOpdikvLJTSiiqprKyUivJyE5U597DJBotOVfHT3Xlsk4qi
+0C8N3W5O5pmen21GS48Z47RocUVjGIklTJtwQZ1G0sa669TdkQonQ0Rq/KGH
+/K73D+s2SrJukg8QN4m7905aqSUh6U5dw7GuNhdCVdYa37e+WkoKnZKpbsl8
+mfkTdyEhHHMXrMOkrW5cRN/xn4bYGam1hqZQSoqd/BmOh4ags8nbphKrMgvL
+auCkRt8dLfVSbkKTIhMThgUVSTPmLwzomwwabjelktyakEzkFmXlSl9ZagKi
+zlaZUjHGuqsdpCBE8pcaDMqWGuRfWxKhp/nPWmrLu3GztKoxSGFZr9afBJp3
+ey+xfw40G9Ei7RGDk+loNxa0w8aRYebO6LyOdvP7jkxwjv9dJhMCBcqzvLCR
+cor+ecZ9TbeIm/XDDnN6eK+9bEXqT/34rkwmxDXA0x0pyfA/WRr758F9hv6O
+LCS/6+zKu758sPnG9Ytnrf1zhFLLrT/3hNwX4mnceiuex+IU8A2VLc895+qZ
+GcC15dKlwZIU2OEKS7Xsqac6WK5Ln3oqWJoCO1TJ5hKMu1itm+WONpP5IAV8
+iKJuMidlv/0caqrJm5uDDx3sSD+eT8wffcT6lLHTbpLnd5v+Lxy3kXKGyl6t
+Szj7bKtZRv4H0dnbcQn9g//ppPd2nDuDA11BNe0bfEY7x0svuQH/97ZubJ7f
+XRk7hb/xuummbLULLTJdXWf9l6b5UpRo2aAtPdfCGWp3Fi3yZdxfigzR6amt
+iVanT54cfBoPtl7B7r/fVS6R8b/0UltW81k82FoFoyadrio+oyZ9zpzg83iw
+Nbob2Mmrr3ZXtRTTuHL0TDzkF4rw6ad7dN5+EQ+WUbBo0y3303V1QVc82Cql
+k8j773/P1tG4su218ZCfKUJabbXimoa9+fM9r/OChZenVM9Ei6MnTHCDEoKf
+lQr78MPZLltfwWxH9Li4WqEQ1Bnn9NZaiASf4WNljRYHd++ttYMSrORyRR3t
+rf3FL2xvrR0xMB62XWGpzdXeWgpJpk51gwbHwy5TsnEXqK3Vmhlqaz+3Iut9
+grzgHyhqSma1t5a/5851g4bFw7YpatBoby3oXW+tHZRwsJco6qlTu5fMLl8e
+9cDywi5WWEpm4TKfwfX6ejdoo3jYViU7t2TWddnaQQl96wsVNSWz2mWLrC1c
+6AZ9PR72PYXN7bJ9+GE3aNN42LBfPU+XrR2R0LQ+T2HzdNnaEZvFw76j7NIu
+Wy2eRX2gRsxPtG/dQjcrQnprtWTW99ZaiC3iEc5VWEpm0YR85ntr7Yit4mHf
+VGK1txYdjC5GJ/sYZut48CZFTclsTm+tHfGteNg3FJaSWQyNlszef78blNBr
+/rrC5vbWdnS4QdvFwzYqbLRk1vfW2hE7xMO+quzS3lp1InAoulx4mdC0PltR
+5+mytSN2iodtUFiKL4wXHi2ZtSN2iYcNm9WjXbaXX25tux2R0LH+ksJGu2yJ
+k5qa3KDCeNiZyq5oyWy2y9YOSmhar1fUdNlq8SzRYXu7G/TdeNjnFTZPl60d
+sWcE1oI+q8RyRgl5tbfWlcxaoIRW9TpFSG8t2QA+IzvQ0uIG7R0P+4zCam+t
+lsxOmuQG7RsPG7aoP/RQ95LZlSvdoIQ+9acUNre39tVX3aD942GnKbtgjZbM
+am+tN/8JrepTFXW0t9aXzNoRB8bDPqGwlMzm9NbaEQfHw05RsvN32dpBCU3r
+kxV1bpft229HT+EQaxcRPcaREMElQ7/CKao4EeN58yThnZlHFZU25WqF7b33
+ukGj7IDhVl7hBAeUXil0Iiujo4VyRFBhb7FfcMlskgkRDSaDEFOO4zRrlgQJ
+tDyitDzxRLbJd/Ro2+RrR2ziaWHZXE5SRknfJ7aXCysOP2WNuB5UGLPjKCIj
+rGYzoGW4LT+EFg4Pwogpw17TuE1FJzXhsJJEDaw1ghckuC01SjOVwjnNxXaE
+SxwNs8JKVIANo2oVmnFzKKJG0aKgUXhUoo4YIUouZxRzRfExepFGJGp8sZyo
+Dzp1YAEdl5BgdGCQYIknqWDm72e2g/p4iik0JfmIGWG3ESzadGgq4gwhkHAY
+39LsVH9PMVofrULMSW0r/gWpZRQc7TLUoCJANEdgZcwRSXoHZaIyuKGhe2V0
+a6sPt4Zav43pKIxHQcEYThoN4nRbI5PsuVEegZKJbHEqWQGyAmPx/ShGpgiZ
+o0TQwLzEuJAZVa6WygeVOEqvkTwtvX700aDDE8fBolkANrJ2Jmf3aEjBMYA4
+LKzxhzxxw0Iesl60O4eL5hN6ZmhIwVSx4xwCs2uHxLOvWimMFnj7TvAlnkKU
+FDEOWoR4F/uNPHAsSK3CHoJYc4xDCjVghEKOEQoS9UHpO6gQceZDZZj5j4qn
+8H6lMNpvTnH0G29479pRiN/Jmmnlo6QIeeIkcHDgIQ6aUbGewqFW6UA1Ykoo
+zmooxqfWEP6hPCgBN4otODGevPv0xOS2tKMs1q1zDzANsSJCgwP8q6pyGpiD
+otQhFGZX+3nikD60LO4ZG0xLBu2NmDUkmAPC2TPCk9Tsf6/yLk/3+2ueMpQl
+TigNVCg3lA6yxLlkZ3F5zMFwbBtizwT6C6oI+zhHtPYguqSSmMroxIviifqn
+EgV3KcrXJMiMGd7PG2JdNaIeNC2pIII82EVnF64BomXOUj9PFFafWIO9ZEbo
+pzuY6ytYxfkyU46NJ+pu3cbcznjO++rVzq8abN0M3BT8BejCuiFkKBy8d6Pr
+vIANtpxCyWH10ODMhGBSHYX1MMotSOj0vEvZhFBrM4Bvlp/m2YTcY4TQfYgF
+AQC6FEODAeNAG1Hq5ylCooh90XlQjRBymAn3OF1I05/jKfqHUoTmx32ItBhM
+9gxi41CJdJpxDYLJRTthmzD7nEAlBz8NUaJNCgZxYjl9kEPPiHGEkloPw/dC
+oq3yLGvFCm/HBllXFovK5QFaH8HANnHkDOVKCfoUHUv7EfJDWgQhoDWIrTIG
+xEtIXkpuV0pIYGkPBJqvocGrr0E2k8ZUUIIvAv/YJvbDhLtKCZJMgMDxwgKw
+RTzSgRSTTjd2OXAP2fy7nsm4TSUfRYAC1CYMVPXatXd7+pF8NoWNxdKjzOEk
+Ymak3tE/yIah+CI8F8CBxSKhVUi7GA3t+9C+wic3btW9yNOwf4dfC/d7HBkM
+EUKHdkXVYSKMEBX4tXD8yYJgv5ArQm1OGWsxU/gmsf+BtzsqdE1Y4dGju70C
+UOHXhMOGZmJ/MD1IOstGKxlTV+DlC0hSVyQLsckoJTwGuEVWDjfGN4V9Fc+A
+hI/WYAP1PQFf0X9jRNKIIjh8GCPCSLYA+2WG6+5wUsgdct7oQedQAUL5uNFC
+L+YuIvXRkMgi8r0acpOSDoKcZwqu96TjIXNIyI1if3AYSdyxVxHBIg+HFcN5
+wr8n84ovibtmNuDVKOn9ct8Y0Vqk/84TIzfpWSfGBHP35xKu8cvArGDH8Rqw
+7ZgUlDQm1qhKt4yBNkuHIsWhQI7QUxwr49P5lN7/yFslN+rG6CMOfMaR/uij
+4Co/JxEArZOIOiYJzYVtxuPX5eAQ0qnLrjAGy4hTZA6dT8V+1c+dlOtKEISc
+JyXG+pWwN5gZvAhEjHwj0misWbgSzBkOFUeDnCZhFR6LiS+DRdGV/DufS/mT
+rhdNxGHUBD0mbM0arZvBTcYOTpzohAbXGx0V3QkUAyeL+AwDgs3EqTAWyl99
+fFWPrlyvO0B1o76sgegvWOALuwbagI2OdPw/fHJceLhtvCFb8cQYXBEcZ8wg
+O0AmBBWLLLnA7yt7t+WPuoToAx+k5GpqgvP9Ejj+LAERx5BDpr/LCZeAakD2
+kEPiUTaMjTMbqFexX+bplz8omcwbLTHr7AzO9mRiCUBJLoQ4A+8fHUS+RsnE
+SCM/hCvYcpxBrIdRxf5+N6/LFj7/FH2YBF+msdGXWA6wHa2kmnDyEVO8CXO0
+chlEXpcbFjAjpbhoFknCJenv9bDkf9vkFP8xTiOdplzakD4g12e8ZqVAH/Ml
+TQB/YCVBNefE4km4vbxaGRB9HsUXSp3k0aNneA6E1eFL4MAbnA79AKv/UT0Y
+aFQMyrLTq8OEG8SrFDNumD6uwmGZPt0/SjjAsoUra+wSqWjQGPYoZkQammE9
+6gV7u2SJmz/h9enfKNe1SKv70yzH+I+5CiIbQ8Bw5pnORTejFDl6jY3AuLNs
+TN6qVQ5FwjPSZbrsaImXf9hFH8ogXCHkRekh0KzRrFUxk+gjMEDr4IgSIfsL
+DEl4CXqsYo4+C0Pec/x4/+CmkzRMBDk/MKPQwq3ub7OtRCuIKkfCGKie12MW
+6xWKbMqUHu/I/MQjQ/3AYOwXzgPLjCADCnFjZ3FnUZoWWcJTypcpWvwW9ASf
+kT2ZNcsXKA+woT3HA6HCbLKv4Xnub0NIdDmZXqyrEU83f8JryJeoROV/veYQ
+TxWZV6IgbrvIUZjwKlC0JBrwETnA8AwjbSdPeM1YWwK7vXrji3cO8p9haGEy
+O4oON8sLVJBQmqQUOFqYMYJ/FaSEG6JfK9rcB3MmT/Ytmv0t/9FDuOSgIODX
+paKrCK85WBjYUE8l3PCE71XhumlFkH9oR1/FwONAW5AdQ4Vll9rfbgYsJ6RH
+l5kgNPV65kLFmftAz5w5gb6mQQ4E/xgfhqxMdEthCYcIZQ5doUVIeBD4fJWk
+/F8F4O78hlqdiaGBvfgnWE1m4W/kGV1Mzt9InJs74THf83SZ0a8PQCF/+KF/
+Sruf1aqYX6zPTjuFZ4UcAblYEp6kNI36cPMmJHLPUXR5vnFgd48O6SE0xH03
+1kbRYRlJo5F1JskYCk7C27tnK0Pzf0nBbh4j6TPyAITVEYy4oOggAlC2kCyw
+nfe4eIxn6QJz3yuaPz/YxaNj/1Dd5BPM2hUdG41+RYJRUYThdtKER3PPVHR5
+vgphJy8uaHzCIrJNaEMOLFOQesPpQzl0W94p8fjC18XyfH3CDh4fvCY9guom
+5YcQMwV8R8mRXyIOC09Ewiu3pym+6FcuIPOzZ/tX/IfYjAfZKG704CFDWCPD
+cGw5oVoEf3Y8KvW3Yr6hYRu/eVh5XA0OmTkvbvP62eOO+KD2uM/g57wIMour
+RFcTfZ3Jf4uDq08ZbP1Wsm7IDBxjCPqLOA4Jnjev20N8eZdykuLRl5zUSZw2
+zX/jQz8rFZgaDvWoUeE6oIpgBaatXu3mK43HdKIyLf/3Q2zpF0XWEv+VKEoX
+BWsxteg2c+TdnJfFozpBF5X7RtTcub6vvJ8VPXQDdtQEBLooskbcZ+Hm+jKx
+pHuA43RRud88gVZav34zvyi0P2oYBmOUmAHDhMyThDcG1c2Z8IDlsbqoPN9S
+MdLjYRPJDpGxV+Yh51hR1PyKFd0eSc2L5xjFk/vdFjNn+q9MGWxDHWQdS6km
+BZK4FENgw/OacGHxM2Vd7vdguCeutMqaLUQFmyPqDWaBVU3EmK+/3u2l4Lxo
+inU5eb4vwxXxDbIqlPm0AQRNhcvO1rS0uIkSnp88SlEQQue8mLVxDAq4Rs0Z
+uddly9xECc9Mhu/TResC/cNaG/UCxYcfuokSnpM8QlFE39/y5YMjPApUK/6u
+KqR8KCriUahD3+2Zrux3eWzgsWD08Pn0OUsEndMbxXJbPJbDdCHR17zwr5Yt
+8ymIQfZA4smSKOYgMoS0AB7D4sVuojviURyqKKLfDOIf/RrmUeDik4nCdUGs
+9YyQR33rLTdR9NlIi+GHyiGUZM8XwTSNxR0Vu6+6hOgM02oceEdkwruQGmR0
++2oR/2qYpvnQI+Tk9LxglzE+qB5f1uG/aCAvioMVRfQbSLj5e+CBYHCEPRgV
+3BiUpiZUMFwff+wmGh+P4iBFES2m9G+QDfJcwh3HQCmXODeEAob7bqLq+Pk1
+Psn3ZSYD/RKQYnxBfX2GZeBZRLmU8Hjk/rrX+Z8z0w48rDx7jbkEGs+b0WFk
+kvBO5H66itz3xxYv9unOQdbf4ShoXTh7TVTEtaoGeQ/Ho9hXUeT5IpX+fglo
+FEwDV9x6UrgdC0PmhDcjw+cIuerN+bIVvQKATNxWfAbQswSOnTHibqKEhyG/
+p/PD55x3hHR+8iyYOy2JID1KkssobjdRwuORe+ou5//Slr4eBbdEZIjYf6DJ
++GCxw9BlWjwKF3wN7/mQSrt7zgRXh6OmSh3PAE/ExB1ukunxc++uc3PHoCWp
+7vUOO4DcDHpKWcNRxCPmUscOeCZ+7kKdO/rFMLjS7othrBbCSuBPAUZ+gGAi
+9C4SnpR08drQfN8aY/NgqApQIS5kQmbO9HM+H5nTTrmLzhT9DhkkYNIkm0/h
+OPEruEpZgtE6bqb6eOpcgdqQbMO0/26ZaQ+vCgs0kRHuldTiJTwmuaNOFymJ
+Xb/HnvLYTS3h2jE96FZNPc6Kn24HnU6/gcYsbd3wDWXi6bWy267rwyOMp6l6
+riF+Ohd8DQ57bNeaz8fvfavsuF2XnQpnAjUabmvCG5Lb6lz+G2rWmJN719ev
+lG1GrrJzUUVBqV0YECe8KenCqEFhVW3XRptIZcH5stUGK0Lf5/HH3eDX46cZ
+Zf8caAPxdfsdIA8EJ8u2g5aEemT6dE/KnPg5ttI52J3LL5fH+h4juxa8befA
+Bpso0g1+M36OLXUOQ/Mzm54kewevWPgdt19rUwghS1yNmXd+B3ar/bA/kfqQ
+gXnwbK54jJ8068CxcnDwnMWz9TcyNuoJt9F9EaH3h0Ykv/sYKd6wLyn0LPTI
+dwG6mZJipPDtK6rkqIKpztAP+1RuvXmtLba1I117S/YCqsebhEO61Vsk1Gbk
+uwV00dcAaZ/2qpy/8UTpF3TJiH6fyg1jO8LjNi+XguxreW7K3hVO5Lsa04d2
+Vi9bIeX7PCIbBCstCRcd0WIrQPhp6Ym+sgf69JKHfOj1hZcJF8yUUX0X2Q04
+etu35J1G36exIA13r2oWLGpbWaEt3rMmLpJ9N5jrDsmQd+TZO+c7hK29WGwv
+CgzyLXYjz+uF76yW43d+0+LevE+bVJ36rKxb67ylRb3hdXpBQD70G+pWG89z
+3KnzZXCfjAwNPpNrCx+WVQudoXi/J3p98EddvpRb/HwyvoFnem31x7LdsA/s
+wk8Y9qS0TZoZeGjJnvYe782oM5t+/94d7TC/4MWt6+SY77Q4hdbnHZlx2vgw
+6bS0+4KjT54M9FQnXZpH0Q3x6Gx36EVtMrTv5zIkWCV/2u5uWfO2/UJY/y2/
+fiu6P9AR3sNHLrjzqdDBnqy6J1bJjhsts6s6ZuCTsuiWyW6Q6xXNq+YHekz4
+Yyfuv9iFBMF8qT3yNpeAMD8fxYNrkQM277Zrl8vwglUyKMjItSNvl9UzreWV
+j+PBtWDw7TlrZP+t37fYDyt4RhZcdU/YQNMRD943wt9rz2yVAX3WyMbBchm/
+V0V4I/tJFHxwFNz+zH56hew6wmE+aehkaa/2DYOdUbhBIdzqzHoZe/gcKQjW
+yhbB+zL1uKrQCerWWT7Agrwy4T3ZafBCO/3ZIx+XlQ3WjMmq6FD3tVDMuFXf
+9+XpS2qxrg5dtH08u/b/399M/W/6POjz/wADcvcO\
+\>"]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1096, 720},
+WindowMargins->{{Automatic, 76}, {Automatic, 0}},
+Magnification:>FEPrivate`If[
+  FEPrivate`Equal[FEPrivate`$VersionNumber, 6.], 1.5, 1.5 Inherited],
+FrontEndVersion->"8.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (October 5, \
+2011)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 162, 3, 51, "Subsection"],
+Cell[744, 27, 127, 3, 39, "Text"],
+Cell[874, 32, 208, 6, 40, "Input"],
+Cell[1085, 40, 261, 5, 62, "Text"],
+Cell[1349, 47, 284, 9, 40, "Input"],
+Cell[CellGroupData[{
+Cell[1658, 60, 439, 13, 40, "Input"],
+Cell[2100, 75, 217, 5, 40, "Output"]
+}, Open  ]],
+Cell[2332, 83, 200, 4, 39, "Text"],
+Cell[2535, 89, 269, 7, 40, "Input"],
+Cell[2807, 98, 388, 8, 107, "Text"],
+Cell[3198, 108, 356, 10, 40, "Input"],
+Cell[3557, 120, 732, 13, 152, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4326, 138, 131, 3, 51, "Subsection"],
+Cell[4460, 143, 148, 2, 39, "Text"],
+Cell[4611, 147, 237, 6, 68, "Input"],
+Cell[4851, 155, 133, 3, 39, "Text"],
+Cell[CellGroupData[{
+Cell[5009, 162, 314, 9, 68, "Input"],
+Cell[5326, 173, 276, 9, 64, "Output"]
+}, Open  ]],
+Cell[5617, 185, 234, 4, 62, "Text"],
+Cell[5854, 191, 212, 6, 68, "Input"],
+Cell[6069, 199, 316, 6, 62, "Text"],
+Cell[CellGroupData[{
+Cell[6410, 209, 291, 9, 68, "Input"],
+Cell[6704, 220, 251, 8, 64, "Output"]
+}, Open  ]],
+Cell[6970, 231, 525, 10, 129, "Text"],
+Cell[CellGroupData[{
+Cell[7520, 245, 280, 6, 68, "Input"],
+Cell[7803, 253, 177, 4, 64, "Output"]
+}, Open  ]],
+Cell[7995, 260, 301, 5, 62, "Text"],
+Cell[CellGroupData[{
+Cell[8321, 269, 274, 8, 68, "Input"],
+Cell[8598, 279, 272, 8, 64, "Output"]
+}, Open  ]],
+Cell[8885, 290, 322, 6, 62, "Text"],
+Cell[CellGroupData[{
+Cell[9232, 300, 320, 10, 68, "Input"],
+Cell[9555, 312, 334, 11, 64, "Output"]
+}, Open  ]],
+Cell[9904, 326, 275, 6, 39, "Text"],
+Cell[CellGroupData[{
+Cell[10204, 336, 453, 15, 70, "Input"],
+Cell[10660, 353, 214, 5, 40, "Output"]
+}, Open  ]],
+Cell[10889, 361, 348, 6, 62, "Text"],
+Cell[CellGroupData[{
+Cell[11262, 371, 412, 12, 70, "Input"],
+Cell[11677, 385, 2086, 40, 357, "Output"]
+}, Open  ]],
+Cell[13778, 428, 326, 6, 62, "Text"],
+Cell[14107, 436, 192, 7, 40, "Input"],
+Cell[14302, 445, 239, 7, 70, "Input"],
+Cell[14544, 454, 176, 4, 39, "Text"],
+Cell[CellGroupData[{
+Cell[14745, 462, 1168, 35, 110, "Input"],
+Cell[15916, 499, 17001, 287, 338, 3843, 70, "CachedBoxData", "BoxData", \
+"Output"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
