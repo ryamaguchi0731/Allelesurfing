@@ -1,0 +1,17 @@
+Parameters for AlleleSurfing_2_28_17
+Parameter file name: pars.csv
+Data file name: data.csv
+Coalescent file name: coal.csv
+
+number of genertations (gmax): 600
+Scenario (scene): 1 
+# of populations (nPop): 1
+# of other loci (nOther): 2
+Carrying Capacity (K): 200
+Maximum growth rate (R): 1.0
+migration rate (m): 0.0
+recombination rate (r): 0.5 0.5 0.5
+mutation rate (mu):  0.0001
+focal coalescent locous (coalLocus): 0
+
+
