@@ -1,3 +1,0 @@
-3_13_17:  I fixed the problem with mating. Now the population stays approximately near carrying capacity over the long term.
-It no longer declines slowely over time.  The question now is how to run several simulations with the same demographic history
-for testing the coalescent times.
